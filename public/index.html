@@ -27,38 +27,14 @@
             <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
             <span class="game-name">Breakout</span>
         </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Tetris</span>
-        </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Breakout</span>
-        </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Tetris</span>
-        </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Breakout</span>
-        </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Tetris</span>
-        </div>
-        <div class="games" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
-            <span class="game-name">Breakout</span>
-        </div>
     </div>
         
     <div class="modal-container" id="modalContainer" style="display: none;">
-        <div id="tetrisCanvas" class="game-area" style="display: none;">
+        <div id="tetrisContainer" class="game-area" style="display: none;">
             <span class="title">Tetris</span>
             <div class="menu" id="tetrisMenu">
                 <span class="menu-title">TETRIS</span>
-                <span class="control-selection" id="tetrisControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGesture(this)"></i></span>
+                <span class="control-selection" id="tetrisControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureTetris(this)"></i></span>
                 <span class="game-over" id="tetrisGameOver" style="display: none;">GAME OVER!!</span>
                 <span class="final-score" id="tetrisScore" style="display: none;"></span>
                 <div class="browser-screen-loading-content" id="gestureLoader" style="display: none;">
@@ -69,30 +45,15 @@
                       <i></i>
                     </div>
                 </div>
-                <button class="menu-button" id="startTetris" onclick="startGame()">Play!</button>
+                <button class="menu-button" id="startTetris" onclick="startGameTetris()">Play!</button>
             </div>
             <canvas id="tetris" width="480" height="600"></canvas>
             <span id="score" class="score"></span>
         </div>
-        <div id="breakoutCanvas" class="game-area" style="display: none;">
+        <div id="breakoutContainer" class="game-area" style="display: none;">
             <span class="title">Atari Breakout</span>
-            <div class="menu" id="breakoutMenu">
-                <span class="menu-title">Breakout!</span>
-                <span class="control-selection" id="breakoutControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGesture(this)"></i></span>
-                <span class="game-over" id="breakoutGameOver" style="display: none;">GAME OVER!!</span>
-                <span class="final-score" id="breakoutScore" style="display: none;"></span>
-                <div class="browser-screen-loading-content" id="gestureLoader" style="display: none;">
-                    <div class="loading-dots dark-gray">
-                      <i></i>
-                      <i></i>
-                      <i></i>
-                      <i></i>
-                    </div>
-                </div>
-                <button class="menu-button" id="startBreakout" onclick="startGame()">Play!</button>
-            </div>
+            <span class="control-selection" id="breakoutControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureBo(this)"></i></span>
             <canvas id="breakout" width="500" height="500" style="border:2px solid #000000"/>
-            <span id="score" class="score"></span>
         </div>
     </div>
     
@@ -100,6 +61,7 @@
     <script src="tmjs/speech-commands.min.js"></script>
     <script src="main.js"></script>
     <script src="games/tetris.js"></script>
+    <script src="games/breakout.js"></script>
 </body>
 
 </html>

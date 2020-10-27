@@ -1,19 +1,22 @@
 const modalContainer = document.getElementById('modalContainer');
-const tetrisCanvas = document.getElementById('tetrisCanvas');
-const breakoutCanvas = document.getElementById('breakoutCanvas');
+const trContainer = document.getElementById('tetrisContainer');
+const boContainer = document.getElementById('breakoutContainer');
 
-canvasList = {
-    tetrisCard: tetrisCanvas,
-    breakoutCard: breakoutCanvas
+const canvasList = {
+    tetrisCard: trContainer,
+    breakoutCard: boContainer
 };
 
 function openModalContainer() {
     modalContainer.style.display = "block";
     window.onclick = (e) => {
         if (e.target == modalContainer) {
-            stopGame();
+            stopGameTr();
+            stopGameBo();
             modalContainer.style.display = "none";
-            tetrisCanvas.style.display = "none";
+            for(const card in canvasList) {
+                canvasList[card].style.display = "none";
+            }
         }
     }
 }

@@ -3,24 +3,24 @@ const gameOverSpan = document.getElementById('tetrisGameOver');
 const scoreSpan = document.getElementById('tetrisScore');
 const menu = document.getElementById('tetrisMenu');
 
-const canvas = document.getElementById('tetris');
-const context = canvas.getContext('2d');
-context.scale(24, 24);
+const tetrisCanvas = document.getElementById('tetris');
+const tetrisContext = tetrisCanvas.getContext('2d');
+tetrisContext.scale(24, 24);
 
-let gestureControl = false;
-function switchToGesture(btn) {
+let gestureControlTetris = false;
+function switchToGestureTetris(btn) {
     btn.classList.toggle("fa-toggle-on");
     btn.classList.toggle("fa-toggle-off");
     let tetrisControlSelection = document.getElementById('tetrisControlSelection');
-    if(gestureControl) {
+    if(gestureControlTetris) {
         tetrisControlSelection.textContent = "Turn ON voice control ";
         tetrisControlSelection.appendChild(btn);
-        gestureControl = false;
+        gestureControlTetris = false;
     }
     else {
         tetrisControlSelection.textContent = "Turn OFF voice control ";
         tetrisControlSelection.appendChild(btn);
-        gestureControl = true;
+        gestureControlTetris = true;
     }
 }
 
@@ -115,8 +115,8 @@ function drawMatrix(matrix, offset) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                context.fillStyle = colors[value];
-                context.fillRect(x + offset.x,
+                tetrisContext.fillStyle = colors[value];
+                tetrisContext.fillRect(x + offset.x,
                     y + offset.y,
                     1, 1);
             }
@@ -125,8 +125,8 @@ function drawMatrix(matrix, offset) {
 }
 
 function draw() {
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    tetrisContext.fillStyle = '#000';
+    tetrisContext.fillRect(0, 0, tetrisCanvas.width, tetrisCanvas.height);
     drawMatrix(arena, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
 }
@@ -233,7 +233,7 @@ function start() {
 
 function stop() {
     if (requestId) {
-        if(gestureControl && recognizer) {
+        if(gestureControlTetris && recognizer) {
             recognizer.stopListening();
             recognizer = undefined;
         }
@@ -259,15 +259,15 @@ function updateScore() {
 }
 
 document.addEventListener('keydown', event => {
-    if (event.code === 37 || event.keyIdentifier === 37 || event.code === 37 || event.keyCode === 37) {
+    if (event.keyIdentifier === 37 || event.code === 37 || event.keyCode === 37) {
         playerMove(-1);
-    } else if (event.code === 39 || event.keyIdentifier === 39 || event.code === 39 || event.keyCode === 39) {
+    } else if (event.keyIdentifier === 39 || event.code === 39 || event.keyCode === 39) {
         playerMove(1);
-    } else if (event.code === 40 || event.keyIdentifier === 40 || event.code === 40 || event.keyCode === 40) {
+    } else if (event.keyIdentifier === 40 || event.code === 40 || event.keyCode === 40) {
         playerDrop();
-    } else if (event.code === 81 || event.keyIdentifier === 81 || event.code === 81 || event.keyCode === 81) {
+    } else if (event.keyIdentifier === 81 || event.code === 81 || event.keyCode === 81) {
         playerRotate(-1);
-    } else if (event.code === 87 || event.keyIdentifier === 87 || event.code === 87 || event.keyCode === 87) {
+    } else if (event.keyIdentifier === 87 || event.code === 87 || event.keyCode === 87) {
         playerRotate(1);
     }
 });
@@ -368,9 +368,9 @@ function initGame() {
     draw();
 }
 
-function startGame() {
+function startGameTetris() {
     initGame();
-    if(gestureControl) {
+    if(gestureControlTetris) {
         let loader = document.getElementById('gestureLoader');
         loader.style.display = "block";
         startButton.innerHTML = "Loading...";
@@ -392,7 +392,7 @@ function startGame() {
 
 }
 
-function stopGame() {
+function stopGameTr() {
     stop();
     initGame();
     arena.forEach(row => row.fill(0));

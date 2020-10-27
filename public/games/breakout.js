@@ -1,11 +1,31 @@
-let ctx = document.getElementById('ctx').getContext('2d');
-let WIDTH = 500;
-let HEIGHT = 500;
-let numOfEnemies, enemyList, score, intervalVar, running, hitCount;
-ctx.font = '20px Calibri';
-ctx.fillText("Click me to start the game", 150, 250);
+const boCanvas = document.getElementById('breakout')
+const boContext = boCanvas.getContext('2d');
+let widthBo = 500;
+let heightBo = 500;
+let numOfEnemiesBo, enemyListBo, scoreBo, intervalVarBo, runningBo, hitCountBo;
+boContext.font = '1.25em Calibri';
+boContext.fillStyle = "#ffffff";
+boContext.textAlign = "center";
+boContext.fillText("Click anywhere in the box to start the game", boCanvas.width/2, boCanvas.height/2);
 
-let ball = {
+let gestureControlBo = false;
+function switchToGestureBo(btn) {
+    btn.classList.toggle("fa-toggle-on");
+    btn.classList.toggle("fa-toggle-off");
+    let breakoutControlSelection = document.getElementById('breakoutControlSelection');
+    if(gestureControlBo) {
+        breakoutControlSelection.textContent = "Turn ON voice control ";
+        breakoutControlSelection.appendChild(btn);
+        gestureControlBo = false;
+    }
+    else {
+        breakoutControlSelection.textContent = "Turn OFF voice control ";
+        breakoutControlSelection.appendChild(btn);
+        gestureControlBo = true;
+    }
+}
+
+let ballBo = {
     x: 0,
     y: 0,
     radius: 5,
@@ -14,7 +34,7 @@ let ball = {
     spdY: -3
 };
 
-let base = {
+let baseBo = {
     x: 0,
     y: 400,
     height: 20,
@@ -25,183 +45,197 @@ let base = {
     lives: 3
 };
 
-let enemy = {
+let enemyBo = {
     height: 20,
     width: 40,
     color: 'orange'
 };
 
-running = false;
-document.getElementById('ctx').onmousedown = function () {
-    if (running) {
-        clearInterval(intervalVar);
+runningBo = false;
+document.getElementById('breakout').onmousedown = function () {
+    if (runningBo) {
+        clearInterval(intervalVarBo);
     }
-    startGame();
+    startGameBo();
 }
 
 document.onkeydown = function (event) {
-    if (event.keyCode == 37) {
-        base.pressingLeft = true;
-        base.pressingRight = false;
+    if (event.code === 37 || event.keyIdentifier === 37 || event.keyCode == 37) {
+        baseBo.pressingLeft = true;
+        baseBo.pressingRight = false;
     }
-    else if (event.keyCode == 39) {
-        base.pressingLeft = false;
-        base.pressingRight = true;
+    else if (event.code === 39 || event.keyIdentifier === 39 || event.keyCode == 39) {
+        baseBo.pressingLeft = false;
+        baseBo.pressingRight = true;
     }
 }
 
 document.onkeyup = function (event) {
-    if (event.keyCode == 37) {
-        base.pressingLeft = false;
+    if (event.code === 37 || event.keyIdentifier === 37 || event.keyCode == 37) {
+        baseBo.pressingLeft = false;
     }
-    else if (event.keyCode == 39) {
-        base.pressingRight = false;
-    }
-}
-
-testCollision = function (base, ball) {
-    return ((base.x < ball.x + ball.radius) &&
-        (ball.x < base.x + base.width) &&
-        (base.y < ball.y + ball.radius) &&
-        (ball.y < base.y + base.height));
-}
-
-testCollisionEnemy = function (e, ball) {
-    return ((e.x < ball.x + ball.radius) &&
-        (ball.x < e.x + enemy.width) &&
-        (e.y < ball.y + ball.radius) &&
-        (ball.y < e.y + enemy.height));
-}
-
-drawBall = function () {
-    ctx.save();
-    ctx.fillStyle = ball.color;
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.restore();
-}
-
-drawBase = function () {
-    ctx.save();
-    ctx.fillStyle = base.color;
-    ctx.fillRect(base.x, base.y, base.width, base.height);
-    ctx.restore();
-}
-
-drawEnemy = function (e, i) {
-    ctx.save();
-    ctx.fillStyle = enemy.color;
-    ctx.fillRect(e.x, e.y, enemy.width, enemy.height);
-    ctx.restore();
-}
-
-updateBarPosition = function () {
-    if (base.pressingLeft) {
-        base.x = base.x - 5;
-    }
-    else if (base.pressingRight) {
-        base.x = base.x + 5;
-    }
-    if (base.x < 0) {
-        base.x = 0;
-    }
-    if (base.x > WIDTH - base.width) {
-        base.x = WIDTH - base.width;
+    else if (event.code === 39 || event.keyIdentifier === 39 || event.keyCode == 39) {
+        baseBo.pressingRight = false;
     }
 }
 
-updateBallPosition = function () {
-    ball.x += ball.spdX;
-    ball.y += ball.spdY;
-    if (ball.x > WIDTH || ball.x < 0) {
-        hitCount++;
-        if (hitCount % 20 == 0) {
-            if (ball.spdX < 0)
-                ball.spdX = -(Math.abs(ball.spdX) + 1);
+testCollisionBo = function (baseBo, ballBo) {
+    return ((baseBo.x < ballBo.x + ballBo.radius) &&
+        (ballBo.x < baseBo.x + baseBo.width) &&
+        (baseBo.y < ballBo.y + ballBo.radius) &&
+        (ballBo.y < baseBo.y + baseBo.height));
+}
+
+testCollisionEnemyBo = function (e, ballBo) {
+    return ((e.x < ballBo.x + ballBo.radius) &&
+        (ballBo.x < e.x + enemyBo.width) &&
+        (e.y < ballBo.y + ballBo.radius) &&
+        (ballBo.y < e.y + enemyBo.height));
+}
+
+drawBallBo = function () {
+    boContext.save();
+    boContext.fillStyle = ballBo.color;
+    boContext.beginPath();
+    boContext.arc(ballBo.x, ballBo.y, ballBo.radius, 0, 2 * Math.PI);
+    boContext.fill();
+    boContext.restore();
+}
+
+drawBaseBo = function () {
+    boContext.save();
+    boContext.fillStyle = baseBo.color;
+    boContext.fillRect(baseBo.x, baseBo.y, baseBo.width, baseBo.height);
+    boContext.restore();
+}
+
+drawEnemyBo = function (e, i) {
+    boContext.save();
+    boContext.fillStyle = enemyBo.color;
+    boContext.fillRect(e.x, e.y, enemyBo.width, enemyBo.height);
+    boContext.restore();
+}
+
+updateBarPositionBo = function () {
+    if (baseBo.pressingLeft) {
+        baseBo.x = baseBo.x - 5;
+    }
+    else if (baseBo.pressingRight) {
+        baseBo.x = baseBo.x + 5;
+    }
+    if (baseBo.x < 0) {
+        baseBo.x = 0;
+    }
+    if (baseBo.x > widthBo - baseBo.width) {
+        baseBo.x = widthBo - baseBo.width;
+    }
+}
+
+updateBallPositionBo = function () {
+    ballBo.x += ballBo.spdX;
+    ballBo.y += ballBo.spdY;
+    if (ballBo.x > widthBo || ballBo.x < 0) {
+        hitCountBo++;
+        if (hitCountBo % 20 == 0) {
+            if (ballBo.spdX < 0)
+                ballBo.spdX = -(Math.abs(ballBo.spdX) + 1);
             else
-                ball.spdX += 1;
+                ballBo.spdX += 1;
         }
-        ball.spdX = -ball.spdX;
+        ballBo.spdX = -ballBo.spdX;
     }
-    if (ball.y < 0) {
-        hitCount++;
-        if (hitCount % 20 == 0) {
-            if (ball.spdY < 0)
-                ball.spdY = -(Math.abs(ball.spdY) + 1);
+    if (ballBo.y < 0) {
+        hitCountBo++;
+        if (hitCountBo % 20 == 0) {
+            if (ballBo.spdY < 0)
+                ballBo.spdY = -(Math.abs(ballBo.spdY) + 1);
             else
-                ball.spdY += 1;
+                ballBo.spdY += 1;
         }
-        ball.spdY = -ball.spdY;
+        ballBo.spdY = -ballBo.spdY;
     }
-    if (ball.y > HEIGHT) {
-        hitCount++;
-        if (hitCount % 20 == 0) {
-            if (ball.spdY < 0)
-                ball.spdY = -(Math.abs(ball.spdY) + 1);
+    if (ballBo.y > heightBo) {
+        hitCountBo++;
+        if (hitCountBo % 20 == 0) {
+            if (ballBo.spdY < 0)
+                ballBo.spdY = -(Math.abs(ballBo.spdY) + 1);
             else
-                ball.spdY += 1;
+                ballBo.spdY += 1;
         }
-        ball.spdY = -ball.spdY;
-        base.lives--;
+        ballBo.spdY = -ballBo.spdY;
+        baseBo.lives--;
     }
 }
 
-isGameOver = function () {
-    if (base.lives < 0 || score == 330) {
-        clearInterval(intervalVar);
-        running = false;
-        ctx.fillText('Game Over! Click to restart', 150, 250);
+isGameOverBo = function () {
+    if (baseBo.lives <= 0 || scoreBo == 330) {
+        clearInterval(intervalVarBo);
+        runningBo = false;
+        boContext.textAlign = "center";
+        boContext.fillText('Game Over! Click to restart', boCanvas.width/2, boCanvas.height/2);
     }
 }
 
-update = function () {
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    enemyList.forEach(drawEnemy);
-    drawBall();
-    drawBase();
+updateBo = function () {
+    boContext.clearRect(0, 0, widthBo, heightBo);
+    enemyListBo.forEach(drawEnemyBo);
+    drawBallBo();
+    drawBaseBo();
 
-    if (testCollision(base, ball)) {
-        ball.spdY = -ball.spdY;
+    if (testCollisionBo(baseBo, ballBo)) {
+        ballBo.spdY = -ballBo.spdY;
     }
 
-    for (key in enemyList) {
-        if (testCollisionEnemy(enemyList[key], ball)) {
-            delete enemyList[key];
-            ball.spdY = -ball.spdY;
-            score += 5;
+    for (key in enemyListBo) {
+        if (testCollisionEnemyBo(enemyListBo[key], ballBo)) {
+            delete enemyListBo[key];
+            ballBo.spdY = -ballBo.spdY;
+            scoreBo += 5;
         }
     }
 
-    ctx.fillText("Score: " + score, 5, 490);
-    ctx.fillText("Lives: " + base.lives, 430, 490);
-    isGameOver();
-    updateBarPosition();
-    updateBallPosition();
+    boContext.textAlign = "left";
+    boContext.fillText("Score: " + scoreBo, 10, 490);
+    boContext.textAlign = "right";
+    boContext.fillText("Lives: " + baseBo.lives, 490, 490);
+    isGameOverBo();
+    updateBarPositionBo();
+    updateBallPositionBo();
 }
 
-startGame = function () {
-    base.x = 150;
-    ball.x = base.x + 100;
-    ball.y = base.y - 100;
-    numOfEnemies = 0;
+startGameBo = function () {
+    baseBo.x = 150;
+    ballBo.x = baseBo.x + 100;
+    ballBo.y = baseBo.y - 100;
+    numOfEnemiesBo = 0;
     let enemyX = 5;
     let enemyY = 5;
-    score = 0;
-    base.lives = 3;
-    enemyList = []; //5+40 = 45
-    running = true;
-    hitCount = 0;
-    ball.spdX = -3;
-    ball.spdY = -3;
+    scoreBo = 0;
+    baseBo.lives = 3;
+    enemyListBo = []; //5+40 = 45
+    runningBo = true;
+    hitCountBo = 0;
+    ballBo.spdX = -3;
+    ballBo.spdY = -3;
     for (let i = 1; i <= 6; i++) {
         enemyX = 5;
         for (let j = 1; j <= 11; j++) {
-            enemyList[numOfEnemies] = { x: enemyX, y: enemyY };
-            numOfEnemies++;
+            enemyListBo[numOfEnemiesBo] = { x: enemyX, y: enemyY };
+            numOfEnemiesBo++;
             enemyX += 45;
         }
         enemyY += 25;
     }
-    intervalVar = setInterval(update, 10);
+    intervalVarBo = setInterval(updateBo, 10);
+}
+
+stopGameBo = function () {
+    if(runningBo) {
+        clearInterval(intervalVarBo);
+        runningBo = false;
+    }
+    boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
+    boContext.fillStyle = "#ffffff";
+    boContext.textAlign = "center";
+    boContext.fillText("Click anywhere in the box to start the game", boCanvas.width/2, boCanvas.height/2);
 }
