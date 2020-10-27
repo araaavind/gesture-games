@@ -299,10 +299,10 @@ async function initGestureBo() {
     webcamBo = new tmImage.Webcam(200, 200, flip); // width, height, flip
     await webcamBo.setup(); // request access to the webcam
     await webcamBo.play();
-    window.requestAnimationFrame(loop);
+    window.requestAnimationFrame(loopBo);
 
     if (!requestIdBo) {
-        requestIdBo = window.requestAnimationFrame(loop);
+        requestIdBo = window.requestAnimationFrame(loopBo);
     }
 }
 
@@ -317,15 +317,15 @@ async function destroyGestureBo() {
     }
 }
 
-async function loop() {
+async function loopBo() {
     webcamBo.update(); // update the webcam frame
-    await predict();
+    await predictBo();
     if (requestIdBo)
-        requestIdBo = window.requestAnimationFrame(loop);
+        requestIdBo = window.requestAnimationFrame(loopBo);
 }
 
 // run the webcam image through the image model
-async function predict() {
+async function predictBo() {
     // predict can take in an image, video or canvas html element
     const prediction = await modelBo.predict(webcamBo.canvas);
     for (let i = 0; i < maxPredictionsBo; i++) {

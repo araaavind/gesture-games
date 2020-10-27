@@ -6,8 +6,51 @@ let eatingSound, droppingSound;
 
 // Global Variables
 let score, level, animation, foodTimer, fruitTimer, gameover, intervalVarCc, paused, foodList, tileList, fruitList, foodDrop;
-
 let tileObject, catcher, foodObject, fruitObject;
+
+let gestureControlCc = false;
+let cupcakeControlSelection = document.getElementById('cupcakeControlSelection');
+function switchToGestureCc(btn) {
+    btn.classList.toggle("fa-toggle-on");
+    btn.classList.toggle("fa-toggle-off");
+    let loader = document.getElementById('gestureLoaderCupcake');
+    if (gestureControlCc) {
+        cupcakeControlSelection.textContent = "Turn ON gesture control ";
+        cupcakeControlSelection.appendChild(btn);
+        gestureControlCc = false;
+        document.getElementById('cupcake').removeEventListener("mousedown", clickHandlerCc);
+        loader.style.display = "block";
+        ccContext.clearRect(0, 0, ccCanvas.width, ccCanvas.height);
+        ccContext.strokeStyle = "#FFFFFF";
+        ccContext.textAlign = "center";
+        ccContext.strokeText("Loading...", ccCanvas.width / 2, ccCanvas.height / 2);
+        destroyGestureCc() // here
+            .then(() => {
+                loader.style.display = "none";
+                ccContext.clearRect(0, 0, ccCanvas.width, ccCanvas.height);
+                initGameCc();
+            });
+    }
+    else {
+        cupcakeControlSelection.textContent = "Turn OFF gesture control ";
+        cupcakeControlSelection.appendChild(btn);
+        gestureControlCc = true;
+        document.getElementById('cupcake').removeEventListener("mousedown", clickHandlerCc);
+        loader.style.display = "block";
+        ccContext.clearRect(0, 0, ccCanvas.width, ccCanvas.height);
+        ccContext.strokeStyle = "#FFFFFF";
+        ccContext.textAlign = "center";
+        ccContext.strokeText("Loading...", ccCanvas.width / 2, ccCanvas.height / 2);
+        initGestureCc() // here
+            .then(() => {
+                loader.style.display = "none";
+                ccContext.clearRect(0, 0, ccCanvas.width, ccCanvas.height);
+                initGameCc();
+                document.removeEventListener("keydown", keydownHandlerCc);
+                document.removeEventListener("keyup", keyupHandlerCc);
+            });
+    }
+}
 
 function initGameCc() {
     catcherOne = new Image();
@@ -82,8 +125,9 @@ function initGameCc() {
 
                                         ccContext.drawImage(background, 0, 0, 500, 500);
                                         ccContext.strokeStyle = "#FFFFFF";
-                                        ccContext.font = "30px Calibri"
-                                        ccContext.strokeText("Click here to start the game", 80, 250);
+                                        ccContext.font = "30px Calibri";
+                                        ccContext.textAlign = "center";
+                                        ccContext.strokeText("Click here to start the game", ccCanvas.width / 2, ccCanvas.height / 2);
 
                                         drawObject = function (object, x, y, width, height) {
                                             ccContext.drawImage(object, x, y, width, height);
@@ -169,14 +213,15 @@ function initGameCc() {
                                         }
 
                                         gameOver = function () {
+                                            cupcakeControlSelection.style.display = "block";
                                             ccContext.save();
                                             ccContext.globalAlpha = 0.6;
                                             drawObject(blood, 100, 100, 300, 300);
                                             ccContext.globalAlpha = 1.0;
                                             ccContext.strokeStyle = "#FFFFFF";
                                             ccContext.font = "30px Calibri"
-                                            ccContext.strokeText("Game Over", 180, 200);
-                                            ccContext.strokeText("Click to restart", 160, 250);
+                                            ccContext.strokeText("Game Over", ccCanvas.width / 2, (ccCanvas.height / 2) - 20);
+                                            ccContext.strokeText("Click to restart", ccCanvas.width / 2, (ccCanvas.height / 2) + 20);
                                             ccContext.restore();
                                             clearInterval(intervalVarCc);
                                         }
@@ -270,8 +315,8 @@ function initGameCc() {
                                                 drawObject(food, 440, 10, 20, 20);
                                                 ccContext.fillStyle = "#FFFFFF";
                                                 ccContext.font = "20px Calibri";
-                                                ccContext.fillText(score, 465, 27);
-                                                ccContext.fillText("Level " + (100 - level + 1), 10, 27);
+                                                ccContext.fillText(score, 470, 27);
+                                                ccContext.fillText("Level " + (100 - level + 1), 40, 27);
                                                 updateFruitPosition();
                                                 updateFoodPosition();
                                                 updateCatcherPosition();
@@ -281,12 +326,14 @@ function initGameCc() {
                                                 ccContext.save();
                                                 ccContext.strokeStyle = "#FFFFFF";
                                                 ccContext.font = "30px Calibri"
-                                                ccContext.strokeText("Game Paused", 165, 250);
+                                                ccContext.strokeText("Game Paused", ccCanvas.width / 2, ccCanvas.height / 2);
                                                 ccContext.restore();
                                             }
                                         }
 
                                         startGame = function () {
+                                            cupcakeControlSelection.style.display = "none";
+
                                             score = 0;
                                             level = 100;
                                             catcher.y = 350;
@@ -388,9 +435,83 @@ function stopGameCc() {
         clearInterval(intervalVarCc);
         paused = true;
     }
+    cupcakeControlSelection.style.display = "block";
     ccContext.clearRect(0, 0, ccCanvas.width, ccCanvas.height);
     document.getElementById('cupcake').removeEventListener("mousedown", clickHandlerCc);
     document.removeEventListener("keydown", keydownHandlerCc);
     document.removeEventListener("keyup", keyupHandlerCc);
 }
 
+// Teachable Machine
+const URL_CUPCAKE = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
+let recognizerCupcake;
+
+async function createModelCc() {
+    const checkpointURL = URL_CUPCAKE + "model.json";
+    const metadataURL = URL_CUPCAKE + "metadata.json";
+
+    const recognizerCupcake = speechCommands.create(
+        "BROWSER_FFT",
+        undefined,
+        checkpointURL,
+        metadataURL);
+
+    await recognizerCupcake.ensureModelLoaded();
+    return recognizerCupcake;
+}
+
+
+async function initGestureCc() {
+    recognizerCupcake = await createModelCc();
+    const classLabels = recognizerCupcake.wordLabels();
+
+    recognizerCupcake.listen(result => {
+        const scores = result.scores;
+        for (let i = 0; i < classLabels.length; i++) {
+            if (scores[i] > 0.90) {
+                switch (classLabels[i]) {
+                    case "_background_noise_":
+                        catcher.leftPressed = false;
+                        catcher.rightPressed = false;
+                        break;
+                    case "left":
+                        catcher.spd = -5;
+                        catcher.leftPressed = true;
+                        break;
+                    case "right":
+                        catcher.spd = 5;
+                        catcher.rightPressed = true;
+                        break;
+                    case "jump":
+                        if (!catcher.onair) {
+                            catcher.jump = 100;
+                            catcher.onair = true;
+                        }
+                        break;
+                    case "pause":
+                        if (paused)
+                            paused = false;
+                        else
+                            paused = true;
+                        break;
+                    default:
+                        catcher.leftPressed = false;
+                        catcher.rightPressed = false;
+                        break;
+                }
+            }
+        }
+    }, {
+        includeSpectrogram: true,
+        probabilityThreshold: 0.8,
+        invokeCallbackOnNoiseAndUnknown: true,
+        overlapFactor: 0.5
+    });
+}
+
+async function destroyGestureCc() {
+    if (gestureControlCc && recognizerCupcake) {
+        recognizerCupcake.stopListening();
+        recognizerCupcake = undefined;
+    }
+}

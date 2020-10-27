@@ -24,7 +24,6 @@ body {
 
 .navbar-header, .navbar-header a, .navbar-header a:active, .navbar-header a:hover, .navbar-header a:focus {
     flex: 1 0;
-    padding-right: 1.5rem;
     width: fit-content;
     text-decoration: none;
     word-wrap: normal;

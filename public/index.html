@@ -16,7 +16,7 @@
     <nav class="navbar">
         <div class="navbar-header">
             <a href="#">Gesture Gaming Arena!</a>
-            <span style="float: right; padding: 1rem; font-family: 'Lucida Sans'; font-weight: 100; font-size: medium;">Created by Kiran and Aravind</span>
+            <span style="float: right; padding: 1rem 0; font-family: 'Lucida Sans'; font-weight: 100; font-size: medium;">Created by Kiran and Aravind</span>
         </div>
     </nav>
 
@@ -71,7 +71,15 @@
         </div>
         <div id="cupcakeContainer" class="game-area" style="display: none;">
             <span class="title">Cupcake Catch</span>
-            <span class="control-selection" id="cupcakeControlSelection" style="display: none;">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureCC(this)"></i></span>
+            <span class="control-selection" id="cupcakeControlSelection" style="color: #ffffff; font-size: 1.25em;">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureCc(this)"></i></span>
+            <div class="browser-screen-loading-content" id="gestureLoaderCupcake" style="display: none; margin-bottom: 1rem;">
+                <div class="loading-dots dark-gray">
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                </div>
+            </div>
             <canvas height="500" width="500" id="cupcake" style="border: 1px solid #000000"></canvas>
         </div>
     </div>
