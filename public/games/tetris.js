@@ -36,7 +36,7 @@ function arenaSweep() {
         arena.unshift(row);
         ++y;
         player.score += rowCount * 10;
-        dropInterval -= rowCount * 50;
+        dropInterval -= rowCount * 10;
         tempInterval = dropInterval;
         rowCount *= 2;
     }
