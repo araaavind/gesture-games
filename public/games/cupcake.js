@@ -15,7 +15,7 @@ function switchToGestureCc(btn) {
     btn.classList.toggle("fa-toggle-off");
     let loader = document.getElementById('gestureLoaderCupcake');
     if (gestureControlCc) {
-        cupcakeControlSelection.textContent = "Turn ON gesture control ";
+        cupcakeControlSelection.textContent = "Turn ON voice control ";
         cupcakeControlSelection.appendChild(btn);
         gestureControlCc = false;
         document.getElementById('cupcake').removeEventListener("mousedown", clickHandlerCc);
@@ -32,7 +32,7 @@ function switchToGestureCc(btn) {
             });
     }
     else {
-        cupcakeControlSelection.textContent = "Turn OFF gesture control ";
+        cupcakeControlSelection.textContent = "Turn OFF voice control ";
         cupcakeControlSelection.appendChild(btn);
         gestureControlCc = true;
         document.getElementById('cupcake').removeEventListener("mousedown", clickHandlerCc);
@@ -510,7 +510,7 @@ async function initGestureCc() {
 }
 
 async function destroyGestureCc() {
-    if (gestureControlCc && recognizerCupcake) {
+    if (recognizerCupcake) {
         recognizerCupcake.stopListening();
         recognizerCupcake = undefined;
     }
