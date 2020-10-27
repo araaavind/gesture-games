@@ -1,3 +1,4 @@
 package-lock.json
 samples/
 node_modules/
+*.psd

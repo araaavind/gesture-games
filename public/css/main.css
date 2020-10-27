@@ -14,7 +14,7 @@ body {
     position: sticky;
     display: flex;
     margin: 0;
-    padding: 1rem;
+    padding: 1.5rem;
     background-color: #1a1a1a;
     top: 0;
 }
@@ -35,27 +35,30 @@ body {
     display: flexbox;
     flex-direction: row;
     width: fit-content;
-    margin: 1rem;
-    padding: 1.25rem;
+    margin: 1.5rem;
+    /* padding: 1.25rem; */
     text-align: center;
     background-color: #1a1a1a;
+    border: 1px solid #000000;
 }
 
 .games:hover {
-    background-color: #141414;
+    background-color: #be3255;
     cursor: pointer;
-    box-shadow: 0 0 10px #131313;
+    box-shadow: 0 0 20px #131313;
 }
 
 .thumbnail {
     display: block;
     flex: 0 0;
+    padding: 0;
 }
 
 .game-name {
     display: block;
     flex: 0 0;
-    margin-top: 0.5rem;
+    padding: 0.7rem 0 0.85rem 0;
+    /* margin-top: 0.5rem; */
     color: #ffffff;
     font-size: 1.25em;
     font-weight: bold;

@@ -20,3 +20,13 @@ function openGame(element) {
     openModalContainer();
     canvasList[element.id].style.display = "block";
 }
+
+const games = document.getElementsByClassName('games');
+for(let i = 0; i < games.length; i++) {
+    games[i].addEventListener("mouseenter", (e) => {
+        games[i].firstElementChild.style.filter = "brightness(50%)";
+    });
+    games[i].addEventListener("mouseleave", (e) => {
+        games[i].firstElementChild.style.filter = "brightness(100%)";
+    });
+}
