@@ -1,8 +1,10 @@
 const modalContainer = document.getElementById('modalContainer');
 const tetrisCanvas = document.getElementById('tetrisCanvas');
+const breakoutCanvas = document.getElementById('breakoutCanvas');
 
 canvasList = {
-    tetrisCard: tetrisCanvas
+    tetrisCard: tetrisCanvas,
+    breakoutCard: breakoutCanvas
 };
 
 function openModalContainer() {

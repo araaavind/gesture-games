@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/loadingDots.css" type="text/css" media="screen">
     <link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
     <title>Gesture Games</title>
@@ -17,11 +18,41 @@
         </div>
     </nav>
 
-    <div class="games" id="tetrisCard" onclick="openGame(this)">
-        <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
-        <span class="game-name">Tetris</span>
+    <div class="cards">
+        <div class="games" id="tetrisCard" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Tetris</span>
+        </div>
+        <div class="games" id="breakoutCard" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Breakout</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Tetris</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Breakout</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Tetris</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Breakout</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Tetris</span>
+        </div>
+        <div class="games" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Breakout</span>
+        </div>
     </div>
-    
+        
     <div class="modal-container" id="modalContainer" style="display: none;">
         <div id="tetrisCanvas" class="game-area" style="display: none;">
             <span class="title">Tetris</span>
@@ -43,7 +74,28 @@
             <canvas id="tetris" width="480" height="600"></canvas>
             <span id="score" class="score"></span>
         </div>
+        <div id="breakoutCanvas" class="game-area" style="display: none;">
+            <span class="title">Atari Breakout</span>
+            <div class="menu" id="breakoutMenu">
+                <span class="menu-title">Breakout!</span>
+                <span class="control-selection" id="breakoutControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGesture(this)"></i></span>
+                <span class="game-over" id="breakoutGameOver" style="display: none;">GAME OVER!!</span>
+                <span class="final-score" id="breakoutScore" style="display: none;"></span>
+                <div class="browser-screen-loading-content" id="gestureLoader" style="display: none;">
+                    <div class="loading-dots dark-gray">
+                      <i></i>
+                      <i></i>
+                      <i></i>
+                      <i></i>
+                    </div>
+                </div>
+                <button class="menu-button" id="startBreakout" onclick="startGame()">Play!</button>
+            </div>
+            <canvas id="breakout" width="500" height="500" style="border:2px solid #000000"/>
+            <span id="score" class="score"></span>
+        </div>
     </div>
+    
     <script src="tmjs/tf.min.js"></script>
     <script src="tmjs/speech-commands.min.js"></script>
     <script src="main.js"></script>
