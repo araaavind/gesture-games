@@ -3,17 +3,13 @@ const boContext = boCanvas.getContext('2d');
 let widthBo = 500;
 let heightBo = 500;
 let numOfEnemiesBo, enemyListBo, scoreBo, intervalVarBo, runningBo, hitCountBo;
-boContext.font = '1.25em Calibri';
-boContext.fillStyle = "#ffffff";
-boContext.textAlign = "center";
-boContext.fillText("Click anywhere in the box to start the game", boCanvas.width/2, boCanvas.height/2);
 
 let gestureControlBo = false;
 function switchToGestureBo(btn) {
     btn.classList.toggle("fa-toggle-on");
     btn.classList.toggle("fa-toggle-off");
     let breakoutControlSelection = document.getElementById('breakoutControlSelection');
-    if(gestureControlBo) {
+    if (gestureControlBo) {
         breakoutControlSelection.textContent = "Turn ON voice control ";
         breakoutControlSelection.appendChild(btn);
         gestureControlBo = false;
@@ -25,41 +21,14 @@ function switchToGestureBo(btn) {
     }
 }
 
-let ballBo = {
-    x: 0,
-    y: 0,
-    radius: 5,
-    color: 'blue',
-    spdX: -3,
-    spdY: -3
-};
-
-let baseBo = {
-    x: 0,
-    y: 400,
-    height: 20,
-    width: 100,
-    color: 'red',
-    pressingLeft: false,
-    pressingRight: false,
-    lives: 3
-};
-
-let enemyBo = {
-    height: 20,
-    width: 40,
-    color: 'orange'
-};
-
-runningBo = false;
-document.getElementById('breakout').onmousedown = function () {
+function clickHandlerBo() {
     if (runningBo) {
         clearInterval(intervalVarBo);
     }
     startGameBo();
 }
 
-document.onkeydown = function (event) {
+function keydownHandlerBo(event) {
     if (event.code === 37 || event.keyIdentifier === 37 || event.keyCode == 37) {
         baseBo.pressingLeft = true;
         baseBo.pressingRight = false;
@@ -70,13 +39,52 @@ document.onkeydown = function (event) {
     }
 }
 
-document.onkeyup = function (event) {
+function keyupHandlerBo(event) {
     if (event.code === 37 || event.keyIdentifier === 37 || event.keyCode == 37) {
         baseBo.pressingLeft = false;
     }
     else if (event.code === 39 || event.keyIdentifier === 39 || event.keyCode == 39) {
         baseBo.pressingRight = false;
     }
+}
+
+let ballBo, baseBo, enemyBo;
+function initGameBo() {
+    boContext.font = '1.25em Calibri';
+    boContext.fillStyle = "#ffffff";
+    boContext.textAlign = "center";
+    boContext.fillText("Click anywhere in the box to start the game", boCanvas.width / 2, boCanvas.height / 2);
+
+    ballBo = {
+        x: 0,
+        y: 0,
+        radius: 5,
+        color: '#6ec5ff',
+        spdX: -3,
+        spdY: -3
+    };
+
+    baseBo = {
+        x: 0,
+        y: 400,
+        height: 20,
+        width: 100,
+        color: '#d6435c',
+        pressingLeft: false,
+        pressingRight: false,
+        lives: 3
+    };
+
+    enemyBo = {
+        height: 20,
+        width: 40,
+        color: 'orange'
+    };
+
+    runningBo = false;
+    document.getElementById('breakout').addEventListener("mousedown", clickHandlerBo);
+    document.addEventListener("keydown", keydownHandlerBo);
+    document.addEventListener("keyup", keyupHandlerBo);
 }
 
 testCollisionBo = function (baseBo, ballBo) {
@@ -168,11 +176,17 @@ updateBallPositionBo = function () {
 }
 
 isGameOverBo = function () {
-    if (baseBo.lives <= 0 || scoreBo == 330) {
+    if (baseBo.lives <= 0) {
         clearInterval(intervalVarBo);
         runningBo = false;
         boContext.textAlign = "center";
-        boContext.fillText('Game Over! Click to restart', boCanvas.width/2, boCanvas.height/2);
+        boContext.fillText('Game Over! Click to restart', boCanvas.width / 2, boCanvas.height / 2);
+    }
+    else if (scoreBo == 330) {
+        clearInterval(intervalVarBo);
+        runningBo = false;
+        boContext.textAlign = "center";
+        boContext.fillText('You Won!!\nClick to play again!', boCanvas.width / 2, boCanvas.height / 2);
     }
 }
 
@@ -204,9 +218,9 @@ updateBo = function () {
 }
 
 startGameBo = function () {
-    baseBo.x = 150;
-    ballBo.x = baseBo.x + 100;
-    ballBo.y = baseBo.y - 100;
+    baseBo.x = 200;
+    ballBo.x = baseBo.x + 45;
+    ballBo.y = baseBo.y - 5;
     numOfEnemiesBo = 0;
     let enemyX = 5;
     let enemyY = 5;
@@ -229,13 +243,13 @@ startGameBo = function () {
     intervalVarBo = setInterval(updateBo, 10);
 }
 
-stopGameBo = function () {
-    if(runningBo) {
+function stopGameBo() {
+    if (runningBo) {
         clearInterval(intervalVarBo);
         runningBo = false;
     }
     boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
-    boContext.fillStyle = "#ffffff";
-    boContext.textAlign = "center";
-    boContext.fillText("Click anywhere in the box to start the game", boCanvas.width/2, boCanvas.height/2);
+    document.getElementById('breakout').removeEventListener("mousedown", clickHandlerBo);
+    document.removeEventListener("keydown", keydownHandlerBo);
+    document.removeEventListener("keyup", keyupHandlerBo);
 }

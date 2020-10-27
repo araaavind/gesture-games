@@ -258,7 +258,7 @@ function updateScore() {
     document.getElementById('score').innerText = "Score: " + player.score;
 }
 
-document.addEventListener('keydown', event => {
+function controls(event) {
     if (event.keyIdentifier === 37 || event.code === 37 || event.keyCode === 37) {
         playerMove(-1);
     } else if (event.keyIdentifier === 39 || event.code === 39 || event.keyCode === 39) {
@@ -270,7 +270,7 @@ document.addEventListener('keydown', event => {
     } else if (event.keyIdentifier === 87 || event.code === 87 || event.keyCode === 87) {
         playerRotate(1);
     }
-});
+}
 
 const colors = [
     null,
@@ -351,6 +351,8 @@ async function initGesture() {
 }
 
 function initGame() {
+    document.addEventListener('keydown', controls);
+
     player = {
         pos: { x: 0, y: 0 },
         matrix: null,
@@ -389,7 +391,6 @@ function startGameTetris() {
         start();
         menu.style.display = "none";
     }
-
 }
 
 function stopGameTr() {
@@ -400,4 +401,5 @@ function stopGameTr() {
     startButton.innerHTML = "Play!";
     gameOverSpan.style.display = "none";
     scoreSpan.style.display = "none";
+    document.removeEventListener('keydown', controls);
 }

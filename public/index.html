@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Games</title>
+    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/loadingDots.css" type="text/css" media="screen">
     <link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
-    <title>Gesture Games</title>
 </head>
 
 <body>
@@ -20,12 +21,16 @@
 
     <div class="cards">
         <div class="games" id="tetrisCard" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="thumbnail"><img src="assets/img/tetris/tetris.jpg" alt="Tetris Thumbnail" width="250" height="300" draggable="false"></span>
             <span class="game-name">Tetris</span>
         </div>
         <div class="games" id="breakoutCard" onclick="openGame(this)">
-            <span class="thumbnail"><img src="assets/img/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="thumbnail"><img src="assets/img/breakout/breakout.jpg" alt="Breakout Thumbnail" width="250" height="300" draggable="false"></span>
             <span class="game-name">Breakout</span>
+        </div>
+        <div class="games" id="cupcakeCard" onclick="openGame(this)">
+            <span class="thumbnail"><img src="assets/img/cupcake/cupcakes.jpg" alt="Cupcake Catch Thumbnail" width="250" height="300" draggable="false"></span>
+            <span class="game-name">Cupcake Catch</span>
         </div>
     </div>
         
@@ -52,16 +57,22 @@
         </div>
         <div id="breakoutContainer" class="game-area" style="display: none;">
             <span class="title">Atari Breakout</span>
-            <span class="control-selection" id="breakoutControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureBo(this)"></i></span>
+            <span class="control-selection" id="breakoutControlSelection" style="display: none;">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureBo(this)"></i></span>
             <canvas id="breakout" width="500" height="500" style="border:2px solid #000000"/>
+        </div>
+        <div id="cupcakeContainer" class="game-area" style="display: none;">
+            <span class="title">Cupcake Catch</span>
+            <span class="control-selection" id="cupcakeControlSelection" style="display: none;">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureCC(this)"></i></span>
+            <canvas height="500" width="500" id="cupcake" style="border: 1px solid #000000"></canvas>
         </div>
     </div>
     
     <script src="tmjs/tf.min.js"></script>
     <script src="tmjs/speech-commands.min.js"></script>
-    <script src="main.js"></script>
     <script src="games/tetris.js"></script>
     <script src="games/breakout.js"></script>
+    <script src="games/cupcake.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
