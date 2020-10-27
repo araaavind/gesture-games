@@ -16,6 +16,7 @@
     <nav class="navbar">
         <div class="navbar-header">
             <a href="#">Gesture Gaming Arena!</a>
+            <span style="float: right; padding: 1rem; font-family: 'Lucida Sans'; font-weight: 100; font-size: medium;">Created by Kiran and Aravind</span>
         </div>
     </nav>
 
@@ -42,7 +43,7 @@
                 <span class="control-selection" id="tetrisControlSelection">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureTetris(this)"></i></span>
                 <span class="game-over" id="tetrisGameOver" style="display: none;">GAME OVER!!</span>
                 <span class="final-score" id="tetrisScore" style="display: none;"></span>
-                <div class="browser-screen-loading-content" id="gestureLoader" style="display: none;">
+                <div class="browser-screen-loading-content" id="gestureLoaderTetris" style="display: none;">
                     <div class="loading-dots dark-gray">
                       <i></i>
                       <i></i>
@@ -57,7 +58,15 @@
         </div>
         <div id="breakoutContainer" class="game-area" style="display: none;">
             <span class="title">Atari Breakout</span>
-            <span class="control-selection" id="breakoutControlSelection" style="display: none;">Turn ON voice control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureBo(this)"></i></span>
+            <span class="control-selection" id="breakoutControlSelection" style="color: #ffffff; font-size: 1.25em;">Turn ON gesture control <i class="fa fa-fw fa-toggle-off" onclick="switchToGestureBo(this)"></i></span>
+            <div class="browser-screen-loading-content" id="gestureLoaderBreakout" style="display: none; margin-bottom: 1rem;">
+                <div class="loading-dots dark-gray">
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                </div>
+            </div>
             <canvas id="breakout" width="500" height="500" style="border:2px solid #000000"/>
         </div>
         <div id="cupcakeContainer" class="game-area" style="display: none;">
@@ -68,6 +77,7 @@
     </div>
     
     <script src="tmjs/tf.min.js"></script>
+    <script src="tmjs/teachablemachine-image.min.js"></script>
     <script src="tmjs/speech-commands.min.js"></script>
     <script src="games/tetris.js"></script>
     <script src="games/breakout.js"></script>

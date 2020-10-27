@@ -5,19 +5,44 @@ let heightBo = 500;
 let numOfEnemiesBo, enemyListBo, scoreBo, intervalVarBo, runningBo, hitCountBo;
 
 let gestureControlBo = false;
+let breakoutControlSelection = document.getElementById('breakoutControlSelection');
 function switchToGestureBo(btn) {
     btn.classList.toggle("fa-toggle-on");
     btn.classList.toggle("fa-toggle-off");
-    let breakoutControlSelection = document.getElementById('breakoutControlSelection');
+    let loader = document.getElementById('gestureLoaderBreakout');
     if (gestureControlBo) {
-        breakoutControlSelection.textContent = "Turn ON voice control ";
+        breakoutControlSelection.textContent = "Turn ON gesture control ";
         breakoutControlSelection.appendChild(btn);
         gestureControlBo = false;
+        document.getElementById('breakout').removeEventListener("mousedown", clickHandlerBo);
+        loader.style.display = "block";
+        boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
+        boContext.textAlign = "center";
+        boContext.fillText("Loading...", boCanvas.width/2, boCanvas.height/2);
+        destroyGestureBo()
+            .then(() => {
+                loader.style.display = "none";
+                boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
+                initGameBo();
+            });
     }
     else {
-        breakoutControlSelection.textContent = "Turn OFF voice control ";
+        breakoutControlSelection.textContent = "Turn OFF gesture control ";
         breakoutControlSelection.appendChild(btn);
         gestureControlBo = true;
+        document.getElementById('breakout').removeEventListener("mousedown", clickHandlerBo);
+        loader.style.display = "block";
+        boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
+        boContext.textAlign = "center";
+        boContext.fillText("Loading...", boCanvas.width/2, boCanvas.height/2);
+        initGestureBo()
+            .then(() => {
+                loader.style.display = "none";
+                boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
+                initGameBo();
+                document.removeEventListener("keydown", keydownHandlerBo);
+                document.removeEventListener("keyup", keyupHandlerBo);
+            });
     }
 }
 
@@ -177,12 +202,14 @@ updateBallPositionBo = function () {
 
 isGameOverBo = function () {
     if (baseBo.lives <= 0) {
+        breakoutControlSelection.style.display = "block";
         clearInterval(intervalVarBo);
         runningBo = false;
         boContext.textAlign = "center";
         boContext.fillText('Game Over! Click to restart', boCanvas.width / 2, boCanvas.height / 2);
     }
     else if (scoreBo == 330) {
+        breakoutControlSelection.style.display = "block";
         clearInterval(intervalVarBo);
         runningBo = false;
         boContext.textAlign = "center";
@@ -218,6 +245,7 @@ updateBo = function () {
 }
 
 startGameBo = function () {
+    breakoutControlSelection.style.display = "none";
     baseBo.x = 200;
     ballBo.x = baseBo.x + 45;
     ballBo.y = baseBo.y - 5;
@@ -248,8 +276,76 @@ function stopGameBo() {
         clearInterval(intervalVarBo);
         runningBo = false;
     }
+    breakoutControlSelection.style.display = "block";
     boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
     document.getElementById('breakout').removeEventListener("mousedown", clickHandlerBo);
     document.removeEventListener("keydown", keydownHandlerBo);
     document.removeEventListener("keyup", keyupHandlerBo);
+}
+
+const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/IYkVLncj7/";
+let modelBo, webcamBo, labelContainerBo, maxPredictionsBo, requestIdBo;
+
+// Load the image model and setup the webcam
+async function initGestureBo() {
+    const modelURL = URL_BREAKOUT + "model.json";
+    const metadataURL = URL_BREAKOUT + "metadata.json";
+
+    modelBo = await tmImage.load(modelURL, metadataURL);
+    maxPredictionsBo = modelBo.getTotalClasses();
+
+    // Convenience function to setup a webcam
+    const flip = true; // whether to flip the webcam
+    webcamBo = new tmImage.Webcam(200, 200, flip); // width, height, flip
+    await webcamBo.setup(); // request access to the webcam
+    await webcamBo.play();
+    window.requestAnimationFrame(loop);
+
+    if (!requestIdBo) {
+        requestIdBo = window.requestAnimationFrame(loop);
+    }
+}
+
+async function destroyGestureBo() {
+    await webcamBo.stop();
+    if (requestIdBo) {
+        window.cancelAnimationFrame(requestIdBo);
+        requestIdBo = undefined;
+        modelBo = undefined;
+        maxPredictionsBo = undefined;
+        webcamBo = undefined
+    }
+}
+
+async function loop() {
+    webcamBo.update(); // update the webcam frame
+    await predict();
+    if (requestIdBo)
+        requestIdBo = window.requestAnimationFrame(loop);
+}
+
+// run the webcam image through the image model
+async function predict() {
+    // predict can take in an image, video or canvas html element
+    const prediction = await modelBo.predict(webcamBo.canvas);
+    for (let i = 0; i < maxPredictionsBo; i++) {
+        if (prediction[i].probability > 0.95) {
+            switch (prediction[i].className) {
+                case "left":
+                    baseBo.pressingLeft = true;
+                    baseBo.pressingRight = false;
+                    break;
+                case "right":
+                    baseBo.pressingLeft = false;
+                    baseBo.pressingRight = true;
+                    break;
+                case "idle":
+                    baseBo.pressingLeft = false;
+                    baseBo.pressingRight = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

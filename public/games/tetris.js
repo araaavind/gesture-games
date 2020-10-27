@@ -12,7 +12,7 @@ function switchToGestureTetris(btn) {
     btn.classList.toggle("fa-toggle-on");
     btn.classList.toggle("fa-toggle-off");
     let tetrisControlSelection = document.getElementById('tetrisControlSelection');
-    if(gestureControlTetris) {
+    if (gestureControlTetris) {
         tetrisControlSelection.textContent = "Turn ON voice control ";
         tetrisControlSelection.appendChild(btn);
         gestureControlTetris = false;
@@ -216,12 +216,12 @@ function playerRotate(dir) {
     }
 }
 
-let requestId;
+let requestIdTetris;
 function start() {
-    if (!requestId) {
-        requestId = requestAnimationFrame(update);
+    if (!requestIdTetris) {
+        requestIdTetris = requestAnimationFrame(update);
     }
-    if(pause) {
+    if (pause) {
         menu.style.display = "block";
         startButton.innerHTML = "Play again!";
         gameOverSpan.style.display = "block";
@@ -232,18 +232,18 @@ function start() {
 }
 
 function stop() {
-    if (requestId) {
-        if(gestureControlTetris && recognizer) {
-            recognizer.stopListening();
-            recognizer = undefined;
+    if (requestIdTetris) {
+        if (gestureControlTetris && recognizerTetris) {
+            recognizerTetris.stopListening();
+            recognizerTetris = undefined;
         }
-        cancelAnimationFrame(requestId);
-        requestId = undefined;
+        cancelAnimationFrame(requestIdTetris);
+        requestIdTetris = undefined;
     }
 }
 
 function update(time = 0) {
-    requestId = undefined;
+    requestIdTetris = undefined;
     const deltaTime = time - lastTime;
     dropCounter += deltaTime;
     if (dropCounter > dropInterval && lastTime !== 0) {
@@ -288,33 +288,33 @@ let dropCounter, dropInterval, lastTime, tempInterval;
 let pause;
 
 // Teachable Machine
-const URL = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
-let recognizer;
+const URL_TETRIS = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
+let recognizerTetris;
 
 async function createModel() {
-    const checkpointURL = URL + "model.json"; // model topology
-    const metadataURL = URL + "metadata.json"; // model metadata
+    const checkpointURL = URL_TETRIS + "model.json"; // model topology
+    const metadataURL = URL_TETRIS + "metadata.json"; // model metadata
 
-    const recognizer = speechCommands.create(
+    const recognizerTetris = speechCommands.create(
         "BROWSER_FFT", // fourier transform type, not useful to change
         undefined, // speech commands vocabulary feature, not useful for your models
         checkpointURL,
         metadataURL);
 
     // check that model and metadata are loaded via HTTPS requests.
-    await recognizer.ensureModelLoaded();
+    await recognizerTetris.ensureModelLoaded();
 
-    return recognizer;
+    return recognizerTetris;
 }
 
 async function initGesture() {
-    recognizer = await createModel();
-    const classLabels = recognizer.wordLabels();
+    recognizerTetris = await createModel();
+    const classLabels = recognizerTetris.wordLabels();
 
     // listen() takes two arguments:
     // 1. A callback function that is invoked anytime a word is recognized.
     // 2. A configuration object with adjustable fields
-    recognizer.listen(result => {
+    recognizerTetris.listen(result => {
         const scores = result.scores; // probability of prediction for each class
         // render the probability scores per class
         for (let i = 0; i < classLabels.length; i++) {
@@ -347,7 +347,7 @@ async function initGesture() {
     });
 
     // Stop the recognition in 5 seconds.
-    // setTimeout(() => recognizer.stopListening(), 5000);
+    // setTimeout(() => recognizerTetris.stopListening(), 5000);
 }
 
 function initGame() {
@@ -372,21 +372,22 @@ function initGame() {
 
 function startGameTetris() {
     initGame();
-    if(gestureControlTetris) {
-        let loader = document.getElementById('gestureLoader');
+    if (gestureControlTetris) {
+        let loader = document.getElementById('gestureLoaderTetris');
         loader.style.display = "block";
         startButton.innerHTML = "Loading...";
         startButton.disabled = true;
         startButton.style.backgroundColor = "#ccc";
         startButton.style.cursor = "default"
-        initGesture().then(() => {
-            loader.style.display = "none";
-            start();
-            menu.style.display = "none";
-            startButton.disabled = false;
-            startButton.style.backgroundColor = "#f3c4df";
-            startButton.style.cursor = "pointer";
-        });
+        initGesture()
+            .then(() => {
+                loader.style.display = "none";
+                start();
+                menu.style.display = "none";
+                startButton.disabled = false;
+                startButton.style.backgroundColor = "#f3c4df";
+                startButton.style.cursor = "pointer";
+            });
     } else {
         start();
         menu.style.display = "none";
