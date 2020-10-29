@@ -288,7 +288,8 @@ let dropCounter, dropInterval, lastTime, tempInterval;
 let pause;
 
 // Teachable Machine
-const URL_TETRIS = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
+// const URL_TETRIS = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
+const URL_TETRIS = "https://teachablemachine.withgoogle.com/models/SvcOta5m-/";
 let recognizerTetris;
 
 async function createModel() {
@@ -343,7 +344,7 @@ async function initGesture() {
         includeSpectrogram: true, // in case listen should return result.spectrogram
         probabilityThreshold: 0.75,
         invokeCallbackOnNoiseAndUnknown: true,
-        overlapFactor: 0.45 // probably want between 0.5 and 0.75. More info in README
+        overlapFactor: 0.25 // probably want between 0.5 and 0.75. More info in README
     });
 
     // Stop the recognition in 5 seconds.

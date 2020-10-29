@@ -283,7 +283,8 @@ function stopGameBo() {
     document.removeEventListener("keyup", keyupHandlerBo);
 }
 
-const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/IYkVLncj7/";
+// const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/IYkVLncj7/";
+const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/j0akWvQsJ/";
 let modelBo, webcamBo, labelContainerBo, maxPredictionsBo, requestIdBo;
 
 // Load the image model and setup the webcam

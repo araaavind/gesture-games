@@ -443,7 +443,7 @@ function stopGameCc() {
 }
 
 // Teachable Machine
-const URL_CUPCAKE = "https://teachablemachine.withgoogle.com/models/40cl_JDZd/";
+const URL_CUPCAKE = "https://teachablemachine.withgoogle.com/models/DHyx9fKbs/";
 let recognizerCupcake;
 
 async function createModelCc() {
@@ -477,10 +477,12 @@ async function initGestureCc() {
                     case "left":
                         catcher.spd = -5;
                         catcher.leftPressed = true;
+                        setTimeout(() => {catcher.leftPressed = false}, 100);
                         break;
                     case "right":
                         catcher.spd = 5;
                         catcher.rightPressed = true;
+                        setTimeout(() => {catcher.rightPressed = false}, 100);
                         break;
                     case "jump":
                         if (!catcher.onair) {
