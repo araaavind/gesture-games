@@ -477,12 +477,12 @@ async function initGestureCc() {
                     case "left":
                         catcher.spd = -5;
                         catcher.leftPressed = true;
-                        setTimeout(() => {catcher.leftPressed = false}, 100);
+                        setTimeout(() => { catcher.leftPressed = false }, 100);
                         break;
                     case "right":
                         catcher.spd = 5;
                         catcher.rightPressed = true;
-                        setTimeout(() => {catcher.rightPressed = false}, 100);
+                        setTimeout(() => { catcher.rightPressed = false }, 100);
                         break;
                     case "jump":
                         if (!catcher.onair) {
@@ -507,7 +507,7 @@ async function initGestureCc() {
         includeSpectrogram: true,
         probabilityThreshold: 0.8,
         invokeCallbackOnNoiseAndUnknown: true,
-        overlapFactor: 0.5
+        overlapFactor: 0.75
     });
 }
 

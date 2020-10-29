@@ -102,6 +102,12 @@ body {
     background-color: #000000d8;
 }
 
+#webcam-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+}
+
 .game-area {
     display: flexbox;
     flex-direction: row;

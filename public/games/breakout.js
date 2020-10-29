@@ -19,6 +19,7 @@ function switchToGestureBo(btn) {
         boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
         boContext.textAlign = "center";
         boContext.fillText("Loading...", boCanvas.width/2, boCanvas.height/2);
+        document.getElementById('webcam-container').style.display = "none";
         destroyGestureBo()
             .then(() => {
                 loader.style.display = "none";
@@ -35,6 +36,7 @@ function switchToGestureBo(btn) {
         boContext.clearRect(0, 0, boCanvas.width, boCanvas.height);
         boContext.textAlign = "center";
         boContext.fillText("Loading...", boCanvas.width/2, boCanvas.height/2);
+        document.getElementById('webcam-container').style.display = "block";
         initGestureBo()
             .then(() => {
                 loader.style.display = "none";
@@ -284,7 +286,7 @@ function stopGameBo() {
 }
 
 // const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/IYkVLncj7/";
-const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/j0akWvQsJ/";
+const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/W2Mslt6GM/";
 let modelBo, webcamBo, labelContainerBo, maxPredictionsBo, requestIdBo;
 
 // Load the image model and setup the webcam
@@ -300,6 +302,7 @@ async function initGestureBo() {
     webcamBo = new tmImage.Webcam(200, 200, flip); // width, height, flip
     await webcamBo.setup(); // request access to the webcam
     await webcamBo.play();
+    document.getElementById("webcam-container").appendChild(webcamBo.canvas);
     window.requestAnimationFrame(loopBo);
 
     if (!requestIdBo) {
