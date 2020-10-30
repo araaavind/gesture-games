@@ -286,7 +286,9 @@ function stopGameBo() {
 }
 
 // const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/IYkVLncj7/";
-const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/W2Mslt6GM/";
+// const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/W2Mslt6GM/";
+const URL_BREAKOUT = "https://teachablemachine.withgoogle.com/models/hXZ6LyAK_/";
+
 let modelBo, webcamBo, labelContainerBo, maxPredictionsBo, requestIdBo;
 
 // Load the image model and setup the webcam
