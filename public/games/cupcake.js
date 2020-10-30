@@ -477,12 +477,12 @@ async function initGestureCc() {
                     case "left":
                         catcher.spd = -5;
                         catcher.leftPressed = true;
-                        setTimeout(() => { catcher.leftPressed = false }, 100);
+                        setTimeout(() => { catcher.leftPressed = false }, 50);
                         break;
                     case "right":
                         catcher.spd = 5;
                         catcher.rightPressed = true;
-                        setTimeout(() => { catcher.rightPressed = false }, 100);
+                        setTimeout(() => { catcher.rightPressed = false }, 50);
                         break;
                     case "jump":
                         if (!catcher.onair) {
